@@ -1,49 +1,58 @@
-import { useState } from 'react';
-
 export default function Home() {
-  const [latime, setLatime] = useState(0);
-  const [inaltime, setInaltime] = useState(0);
-  const [nume, setNume] = useState('');
-  const [telefon, setTelefon] = useState('');
-
-  const cantLateral = 2 * inaltime;
-  const cantSus = latime;
-  const cantJos = latime;
-
-  const pretLateral = 95;
-  const pretSus = 105;
-  const pretJos = 110;
-
-  const totalLateral = cantLateral * pretLateral;
-  const totalSus = cantSus * pretSus;
-  const totalJos = cantJos * pretJos;
-
-  const subtotal = totalLateral + totalSus + totalJos;
-  const tva = subtotal * 0.2;
-  const total = subtotal + tva;
-
   return (
-    <div style={{ maxWidth: '600px', margin: '2rem auto', fontFamily: 'Arial' }}>
+    <div style={{ fontFamily: 'sans-serif', maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
       <h1>Calculator Ofertă AVEPE</h1>
-      <label>Lățime geam (m):</label>
-      <input type="number" value={latime} onChange={e => setLatime(parseFloat(e.target.value))} />
-      <br />
-      <label>Înălțime geam (m):</label>
-      <input type="number" value={inaltime} onChange={e => setInaltime(parseFloat(e.target.value))} />
-      <br />
-      <label>Nume client:</label>
-      <input type="text" value={nume} onChange={e => setNume(e.target.value)} />
-      <br />
-      <label>Telefon:</label>
-      <input type="text" value={telefon} onChange={e => setTelefon(e.target.value)} />
-      <br />
-      <h3>Rezultat:</h3>
-      <p>Lateral: {cantLateral} m × {pretLateral} = {totalLateral} MDL</p>
-      <p>Sus: {cantSus} m × {pretSus} = {totalSus} MDL</p>
-      <p>Jos: {cantJos} m × {pretJos} = {totalJos} MDL</p>
-      <p><strong>Subtotal: {subtotal.toFixed(2)} MDL</strong></p>
-      <p><strong>TVA (20%): {tva.toFixed(2)} MDL</strong></p>
-      <p><strong>Total: {total.toFixed(2)} MDL</strong></p>
+
+      <form id="calc-form">
+        <label>
+          Lățime geam (m):
+          <input type="number" name="latime" step="0.01" required />
+        </label>
+        <br />
+        <label>
+          Înălțime geam (m):
+          <input type="number" name="inaltime" step="0.01" required />
+        </label>
+        <br />
+        <label>
+          Nume client:
+          <input type="text" name="nume" required />
+        </label>
+        <br />
+        <label>
+          Telefon:
+          <input type="text" name="telefon" required />
+        </label>
+        <br />
+        <button type="submit">Calculează</button>
+      </form>
+
+      <div id="rezultat" style={{ marginTop: '2rem' }}></div>
+
+      <script dangerouslySetInnerHTML={{
+        __html: `
+          document.getElementById('calc-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const lat = parseFloat(e.target.latime.value);
+            const alt = parseFloat(e.target.inaltime.value);
+            const sus = lat * 105;
+            const jos = lat * 110;
+            const lateral = alt * 2 * 95;
+            const subtotal = sus + jos + lateral;
+            const tva = subtotal * 0.2;
+            const total = subtotal + tva;
+
+            document.getElementById('rezultat').innerHTML = \`
+              <p><strong>Lateral:</strong> 2 x \${alt} x 95 = \${lateral.toFixed(2)} MDL</p>
+              <p><strong>Sus:</strong> \${lat} x 105 = \${sus.toFixed(2)} MDL</p>
+              <p><strong>Jos:</strong> \${lat} x 110 = \${jos.toFixed(2)} MDL</p>
+              <p><strong>Subtotal:</strong> \${subtotal.toFixed(2)} MDL</p>
+              <p><strong>TVA (20%):</strong> \${tva.toFixed(2)} MDL</p>
+              <p><strong>Total:</strong> \${total.toFixed(2)} MDL</p>
+            \`;
+          });
+        `
+      }} />
     </div>
   );
 }
