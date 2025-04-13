@@ -24,11 +24,11 @@ export default function Home() {
 
   return (
     <div style={{ maxWidth: '600px', margin: '2rem auto', fontFamily: 'Arial' }}>
-      <h1>Calculator Ofertă AVEPE</h1>
-      <label>Lățime geam (m):</label>
+      <h1>Calculator Oferta AVEPE</h1>
+      <label>Latime geam (m):</label>
       <input type="number" value={latime} onChange={e => setLatime(parseFloat(e.target.value))} />
       <br />
-      <label>Înălțime geam (m):</label>
+      <label>Inaltime geam (m):</label>
       <input type="number" value={inaltime} onChange={e => setInaltime(parseFloat(e.target.value))} />
       <br />
       <label>Nume client:</label>
