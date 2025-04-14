@@ -1,58 +1,74 @@
+import { useState } from 'react';
+
+const produse = [
+  {
+    categorie: "Console",
+    cod: "AVE-Cons 101",
+    denumire: "Consolă Clasică",
+    dimensiune: "200x150 mm",
+    pret: 75
+  },
+  {
+    categorie: "Geam",
+    cod: "AVE-101",
+    denumire: "Ancadrament sus",
+    dimensiune: "85x40 mm",
+    pret: 95
+  },
+  {
+    categorie: "Geam",
+    cod: "AVE-102",
+    denumire: "Ancadrament lateral",
+    dimensiune: "120x35 mm",
+    pret: 105
+  },
+  {
+    categorie: "Geam",
+    cod: "AVE-103",
+    denumire: "Ancadrament jos",
+    dimensiune: "100x50 mm",
+    pret: 110
+  },
+  {
+    categorie: "Soclu",
+    cod: "AVE-500",
+    denumire: "Profil Soclu",
+    dimensiune: "180x60 mm",
+    pret: 70
+  }
+];
+
 export default function Home() {
+  const [selectat, setSelectat] = useState('');
+
+  const categorii = [...new Set(produse.map(p => p.categorie))];
+
   return (
-    <div style={{ fontFamily: 'sans-serif', maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-      <h1>Calculator Ofertă AVEPE</h1>
+    <div style={{ padding: '2rem', fontFamily: 'Arial', maxWidth: 800, margin: 'auto' }}>
+      <h1>Calculator AVEPE</h1>
 
-      <form id="calc-form">
-        <label>
-          Lățime geam (m):
-          <input type="number" name="latime" step="0.01" required />
-        </label>
-        <br />
-        <label>
-          Înălțime geam (m):
-          <input type="number" name="inaltime" step="0.01" required />
-        </label>
-        <br />
-        <label>
-          Nume client:
-          <input type="text" name="nume" required />
-        </label>
-        <br />
-        <label>
-          Telefon:
-          <input type="text" name="telefon" required />
-        </label>
-        <br />
-        <button type="submit">Calculează</button>
-      </form>
+      {categorii.map(cat => (
+        <div key={cat} style={{ marginBottom: '1.5rem' }}>
+          <h3>{cat}</h3>
+          <select
+            onChange={(e) => setSelectat(e.target.value)}
+            style={{ width: '100%', padding: '0.5rem' }}
+          >
+            <option value="">-- Selectează {cat} --</option>
+            {produse.filter(p => p.categorie === cat).map(p => (
+              <option key={p.cod} value={p.cod}>
+                {p.cod} – {p.denumire} ({p.dimensiune}) – {p.pret} MDL
+              </option>
+            ))}
+          </select>
+        </div>
+      ))}
 
-      <div id="rezultat" style={{ marginTop: '2rem' }}></div>
-
-      <script dangerouslySetInnerHTML={{
-        __html: `
-          document.getElementById('calc-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const lat = parseFloat(e.target.latime.value);
-            const alt = parseFloat(e.target.inaltime.value);
-            const sus = lat * 105;
-            const jos = lat * 110;
-            const lateral = alt * 2 * 95;
-            const subtotal = sus + jos + lateral;
-            const tva = subtotal * 0.2;
-            const total = subtotal + tva;
-
-            document.getElementById('rezultat').innerHTML = \`
-              <p><strong>Lateral:</strong> 2 x \${alt} x 95 = \${lateral.toFixed(2)} MDL</p>
-              <p><strong>Sus:</strong> \${lat} x 105 = \${sus.toFixed(2)} MDL</p>
-              <p><strong>Jos:</strong> \${lat} x 110 = \${jos.toFixed(2)} MDL</p>
-              <p><strong>Subtotal:</strong> \${subtotal.toFixed(2)} MDL</p>
-              <p><strong>TVA (20%):</strong> \${tva.toFixed(2)} MDL</p>
-              <p><strong>Total:</strong> \${total.toFixed(2)} MDL</p>
-            \`;
-          });
-        `
-      }} />
+      {selectat && (
+        <p style={{ marginTop: '2rem' }}>
+          Produs selectat: <strong>{selectat}</strong>
+        </p>
+      )}
     </div>
   );
 }
