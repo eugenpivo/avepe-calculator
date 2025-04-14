@@ -1,102 +1,101 @@
-import { useState } from 'react';
+// products.js — lista completă a produselor AVEPE
 
-const produse = [
-  { categorie: "Geam", cod: "AVE-101", denumire: "Sus", dimensiune: "85x40", pret: 95, um: "ml" },
-  { categorie: "Geam", cod: "AVE-102", denumire: "Lateral", dimensiune: "120x35", pret: 105, um: "ml" },
-  { categorie: "Geam", cod: "AVE-103", denumire: "Jos", dimensiune: "100x50", pret: 110, um: "ml" },
-  { categorie: "Coltar", cod: "AVE-201", denumire: "Colțar", dimensiune: "200x200", pret: 45, um: "buc" },
-  { categorie: "Soclu", cod: "AVE-500", denumire: "Profil Soclu", dimensiune: "180x60", pret: 70, um: "ml" }
+export const products = [
+  // 🪟 Geamuri
+  {
+    categorie: "Geam",
+    cod: "AVE-101",
+    denumire: "Ancadrament sus (85x40 mm)",
+    dimensiune: "85x40 mm",
+    pret: 95,
+    u_m: "ml",
+  },
+  {
+    categorie: "Geam",
+    cod: "AVE-102",
+    denumire: "Ancadrament lateral (120x35 mm)",
+    dimensiune: "120x35 mm",
+    pret: 105,
+    u_m: "ml",
+  },
+  {
+    categorie: "Geam",
+    cod: "AVE-103",
+    denumire: "Ancadrament jos (100x50 mm)",
+    dimensiune: "100x50 mm",
+    pret: 110,
+    u_m: "ml",
+  },
+
+  // 🧱 Console
+  {
+    categorie: "Console",
+    cod: "CON-201",
+    denumire: "Consolă mică (120x70 mm)",
+    dimensiune: "120x70 mm",
+    pret: 150,
+    u_m: "buc",
+  },
+  {
+    categorie: "Console",
+    cod: "CON-202",
+    denumire: "Consolă mare (150x90 mm)",
+    dimensiune: "150x90 mm",
+    pret: 220,
+    u_m: "buc",
+  },
+
+  // 🏛️ Colțare
+  {
+    categorie: "Colțare",
+    cod: "CL-301",
+    denumire: "Colțar decorativ A (100x100 mm)",
+    dimensiune: "100x100 mm",
+    pret: 80,
+    u_m: "buc",
+  },
+  {
+    categorie: "Colțare",
+    cod: "CL-302",
+    denumire: "Colțar decorativ B (150x150 mm)",
+    dimensiune: "150x150 mm",
+    pret: 110,
+    u_m: "buc",
+  },
+
+  // 🧱 Soclu
+  {
+    categorie: "Soclu",
+    cod: "SOC-401",
+    denumire: "Profil soclu (60x20 mm)",
+    dimensiune: "60x20 mm",
+    pret: 70,
+    u_m: "ml",
+  },
+  {
+    categorie: "Soclu",
+    cod: "SOC-402",
+    denumire: "Profil soclu decorativ (80x30 mm)",
+    dimensiune: "80x30 mm",
+    pret: 90,
+    u_m: "ml",
+  },
+
+  // 🪟 Între etaje
+  {
+    categorie: "Profil între etaje",
+    cod: "ETG-501",
+    denumire: "Profil între etaje A (100x40 mm)",
+    dimensiune: "100x40 mm",
+    pret: 100,
+    u_m: "ml",
+  },
+  {
+    categorie: "Profil între etaje",
+    cod: "ETG-502",
+    denumire: "Profil între etaje B (120x50 mm)",
+    dimensiune: "120x50 mm",
+    pret: 125,
+    u_m: "ml",
+  }
 ];
-
-export default function Home() {
-  const [selectat, setSelectat] = useState(null);
-  const [cantitate, setCantitate] = useState('');
-  const [oferta, setOferta] = useState([]);
-
-  const adaugaProdus = () => {
-    if (selectat && cantitate) {
-      setOferta([...oferta, { ...selectat, cantitate: parseFloat(cantitate) }]);
-      setSelectat(null);
-      setCantitate('');
-    }
-  };
-
-  const subtotal = oferta.reduce((sum, item) => sum + item.pret * item.cantitate, 0);
-  const tva = subtotal * 0.2;
-  const total = subtotal + tva;
-
-  return (
-    <div style={{ padding: '2rem', fontFamily: 'Arial', maxWidth: 900, margin: 'auto' }}>
-      <h1>Calculator AVEPE</h1>
-
-      <select
-        onChange={(e) => {
-          const cod = e.target.value;
-          const produs = produse.find(p => p.cod === cod);
-          setSelectat(produs);
-        }}
-        style={{ width: '100%', padding: '0.5rem' }}
-      >
-        <option value="">-- Selectează produs --</option>
-        {produse.map(p => (
-          <option key={p.cod} value={p.cod}>
-            {p.cod} – {p.denumire} ({p.dimensiune}) – {p.pret} MDL / {p.um}
-          </option>
-        ))}
-      </select>
-
-      {selectat && (
-        <div style={{ marginTop: '1rem' }}>
-          <input
-            type="number"
-            value={cantitate}
-            onChange={(e) => setCantitate(e.target.value)}
-            placeholder={`Cantitate (${selectat.um})`}
-            style={{ padding: '0.5rem', width: '100%' }}
-          />
-          <button onClick={adaugaProdus} style={{ marginTop: '0.5rem', padding: '0.5rem 1rem' }}>
-            Adaugă în ofertă
-          </button>
-        </div>
-      )}
-
-      {oferta.length > 0 && (
-        <div style={{ marginTop: '2rem' }}>
-          <h3>Ofertă curentă:</h3>
-          <table width="100%" border="1" cellPadding="6" style={{ borderCollapse: 'collapse' }}>
-            <thead>
-              <tr>
-                <th>Cod</th>
-                <th>Denumire</th>
-                <th>Dimensiune</th>
-                <th>U.M.</th>
-                <th>Cantitate</th>
-                <th>Preț unitar</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {oferta.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.cod}</td>
-                  <td>{item.denumire}</td>
-                  <td>{item.dimensiune}</td>
-                  <td>{item.um}</td>
-                  <td>{item.cantitate}</td>
-                  <td>{item.pret} MDL</td>
-                  <td>{(item.pret * item.cantitate).toFixed(2)} MDL</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div style={{ marginTop: '1rem', background: '#f3f3f3', padding: '1rem' }}>
-            <p><strong>Subtotal:</strong> {subtotal.toFixed(2)} MDL</p>
-            <p><strong>TVA (20%):</strong> {tva.toFixed(2)} MDL</p>
-            <p><strong>Total General:</strong> {total.toFixed(2)} MDL</p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
